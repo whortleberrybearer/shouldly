@@ -13,7 +13,15 @@ namespace Shouldly
         /*** ShouldThrowAsync(Task) ***/
         public static Task<TException> ShouldThrowWithMessageAsync<TException>(this Task task, string expectedExceptionMessage) where TException : Exception
         {
-            var result = Should.ThrowAsync<TException>(task);
+            return ShouldThrowWithMessageAsync<TException>(task, expectedExceptionMessage, () => null);
+        }
+        public static Task<TException> ShouldThrowWithMessageAsync<TException>(this Task task, string expectedExceptionMessage, string customMessage) where TException : Exception
+        {
+            return ShouldThrowWithMessageAsync<TException>(task, expectedExceptionMessage, () => customMessage);
+        }
+        public static Task<TException> ShouldThrowWithMessageAsync<TException>(this Task task, string expectedExceptionMessage, Func<string> customMessage) where TException : Exception
+        {
+            var result = Should.ThrowAsync<TException>(task, customMessage);
             result.Result.Message.ShouldBe(expectedExceptionMessage);
             return result;
         }
